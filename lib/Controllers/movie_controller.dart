@@ -1,23 +1,26 @@
+import 'package:binge/Model/movie_list_model.dart';
 import 'package:flutter/material.dart';
 
-import '../Model/movie_model.dart';
 import '../Services/services.dart';
 
 class MovieController with ChangeNotifier {
   final APIservices _apiServices = APIservices();
 
-  List<Movie> _nowShowingMovies = [];
-  List<Movie> _upComingMovies = [];
-  List<Movie> _popularMovies = [];
-
+  MovieListModel? _nowShowingMovies;
+  MovieListModel? _upComingMovies;
+  MovieListModel? _popularMovies;
   String _error = '';
   bool _isLoading = false;
 
   // Getters to access the movie lists and status
-  List<Movie> get nowShowingMovies => _nowShowingMovies;
-  List<Movie> get upComingMovies => _upComingMovies;
-  List<Movie> get popularMovies => _popularMovies;
+  MovieListModel? get nowShowingMovies => _nowShowingMovies;
+
+  MovieListModel? get upComingMovies => _upComingMovies;
+
+  MovieListModel? get popularMovies => _popularMovies;
+
   String get error => _error;
+
   bool get isLoading => _isLoading;
 
   // Method to fetch now showing movies

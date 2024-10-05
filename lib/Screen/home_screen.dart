@@ -1,8 +1,9 @@
+import 'package:binge/Model/movie_list_model.dart';
+import 'package:binge/Screen/movie_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import '../Controllers/movie_controller.dart';
-import '../Model/movie_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -76,10 +77,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCarousel(BuildContext context, String category) {
     return Consumer<MovieController>(
       builder: (context, movieController, child) {
-        List<Movie> movies = [];
-        if (category == 'nowShowing') {
-          movies = movieController.nowShowingMovies;
-        }
+        MovieListModel? movieListModel = movieController.nowShowingMovies;
 
         if (movieController.isLoading) {
           return const Center(
@@ -93,45 +91,55 @@ class HomeScreen extends StatelessWidget {
           );
         }
 
-        if (movies.isEmpty) {
+        if (movieListModel?.movies == null || movieListModel!.movies!.isEmpty) {
           return const Center(
             child: Text('No movies available'),
           );
         }
 
         return CarouselSlider.builder(
-          itemCount: movies.length,
+          itemCount: movieListModel?.movies!.length,
           itemBuilder: (context, index, movieIndex) {
-            final movie = movies[index];
-            return Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+            final movie =movieListModel?.movies![index];
+            return InkWell(
+              onTap: (){
+                Navigator. push<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>  MovieDetailScreen(movie: movie),
+                  ),
+                );
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
+                        ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 15,
-                  left: 0,
-                  right: 0,
-                  child: Text(
-                    movie.title,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
+                  Positioned(
+                    bottom: 15,
+                    left: 0,
+                    right: 0,
+                    child: Text(
+                      movie?.title??"",
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
           options: CarouselOptions(
@@ -148,11 +156,14 @@ class HomeScreen extends StatelessWidget {
   Widget _buildListView(BuildContext context, String category) {
     return Consumer<MovieController>(
       builder: (context, movieController, child) {
-        List<Movie> movies = [];
+        MovieListModel? movieListModel;
+
         if (category == 'upComing') {
-          movies = movieController.upComingMovies;
+          movieListModel = movieController.upComingMovies;
         } else if (category == 'popularMovies') {
-          movies = movieController.popularMovies;
+          movieListModel = movieController.popularMovies;
+        } else {
+          return const Center(child: Text('Invalid category'));
         }
 
         if (movieController.isLoading) {
@@ -167,7 +178,7 @@ class HomeScreen extends StatelessWidget {
           );
         }
 
-        if (movies.isEmpty) {
+        if (movieListModel?.movies == null || movieListModel!.movies!.isEmpty) {
           return const Center(
             child: Text('No movies available'),
           );
@@ -177,9 +188,9 @@ class HomeScreen extends StatelessWidget {
           height: 250,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: movies.length,
+            itemCount: movieListModel.movies!.length,
             itemBuilder: (context, index) {
-              final movie = movies[index];
+              final movie = movieListModel?.movies![index];
               return Stack(
                 children: [
                   Container(
@@ -189,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       image: DecorationImage(
                         image: NetworkImage(
-                          "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+                          "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -200,7 +211,7 @@ class HomeScreen extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Text(
-                      movie.title,
+                      movie?.title??"",
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       style: const TextStyle(

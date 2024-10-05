@@ -1,7 +1,6 @@
 import 'dart:convert';
+import 'package:binge/Model/movie_list_model.dart';
 import 'package:http/http.dart' as http;
-
-import '../Model/movie_model.dart';
 
 const apiKey = "e2994afb1f878705c2a5cf3f71716c1a";
 
@@ -13,44 +12,44 @@ class APIservices {
   final popularApi =
       "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
   // for nowShowing moveis
-  Future<List<Movie>> getNowShowing() async {
+  Future<MovieListModel> getNowShowing() async {
     Uri url = Uri.parse(nowShowingApi);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['results'];
-      List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
-      return movies;
+      // If the server returns a 200 OK response, parse the JSON
+      return MovieListModel.fromJson(json.decode(response.body));
     } else {
-      throw Exception("Failed to load data");
+      // If the server does not return a 200 OK response, throw an exception
+      throw Exception('Failed to load now playing movies');
     }
   }
 
   // for up coming moveis
-  Future<List<Movie>> getUpComing() async {
+  Future<MovieListModel> getUpComing() async {
     Uri url = Uri.parse(upComingApi);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['results'];
-      List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
-      return movies;
+      // If the server returns a 200 OK response, parse the JSON
+      return MovieListModel.fromJson(json.decode(response.body));
     } else {
-      throw Exception("Failed to load data");
+      // If the server does not return a 200 OK response, throw an exception
+      throw Exception('Failed to load now playing movies');
     }
   }
 
   // for popular moves
-  Future<List<Movie>> getPopular() async {
+  Future<MovieListModel> getPopular() async {
     Uri url = Uri.parse(popularApi);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['results'];
-      List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
-      return movies;
+      // If the server returns a 200 OK response, parse the JSON
+      return MovieListModel.fromJson(json.decode(response.body));
     } else {
-      throw Exception("Failed to load data");
+      // If the server does not return a 200 OK response, throw an exception
+      throw Exception('Failed to load now playing movies');
     }
   }
 }
