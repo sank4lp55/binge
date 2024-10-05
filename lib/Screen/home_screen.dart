@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Movie App"),
+        title: const Text("bINGE"),
         leading: const Icon(Icons.menu),
         centerTitle: true,
         actions: const [
@@ -191,37 +191,47 @@ class HomeScreen extends StatelessWidget {
             itemCount: movieListModel.movies!.length,
             itemBuilder: (context, index) {
               final movie = movieListModel?.movies![index];
-              return Stack(
-                children: [
-                  Container(
-                    width: 180,
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
+              return InkWell(
+                onTap: (){
+                  Navigator. push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) =>  MovieDetailScreen(movie: movie),
+                    ),
+                  );
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 180,
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 15,
-                    left: 0,
-                    right: 0,
-                    child: Text(
-                      movie?.title??"",
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.white,
+                    Positioned(
+                      bottom: 15,
+                      left: 0,
+                      right: 0,
+                      child: Text(
+                        movie?.title??"",
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),
