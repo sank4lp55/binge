@@ -1,11 +1,12 @@
 import 'package:binge/Model/movie_list_model.dart';
 import 'package:binge/Screen/movie_detail_screen.dart';
 import 'package:binge/Screen/search_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import '../Controllers/movie_controller.dart';
-import 'scanner_screen.dart';  // Import the ScannerScreen
+import 'scanner_screen.dart'; // Import the ScannerScreen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movieController =
-    Provider.of<MovieController>(context, listen: false);
+        Provider.of<MovieController>(context, listen: false);
 
     // Fetching movies when the screen is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -150,13 +151,21 @@ class HomeScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
+                    height: 300,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
-                        ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      // Clip the image to the border radius
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
                         fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                            Center(child: Icon(Icons.error)),
                       ),
                     ),
                   ),
@@ -242,14 +251,22 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Container(
                       width: 180,
+                      height: 300,
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
-                          ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        // Clip the image to the border radius
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
                           fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              Center(child: Icon(Icons.error)),
                         ),
                       ),
                     ),
