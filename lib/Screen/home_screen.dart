@@ -95,18 +95,28 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 16.0),
         child: Align(
           alignment: Alignment.bottomCenter,
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ScannerScreen()),
-              );
-            },
-            backgroundColor: Colors.blue,
-            child: const Icon(Icons.qr_code_scanner, color: Colors.white),
+          child: ClipOval(
+            child: Material(
+              color: Color(0xFFE50914), // Set the background color here
+              child: InkWell(
+                splashColor: Colors.red, // Splash color when tapped
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScannerScreen()),
+                  );
+                },
+                child: SizedBox(
+                  width: 56, // Set the width for the circular button
+                  height: 56, // Set the height for the circular button
+                  child: const Icon(Icons.qr_code_scanner, color: Colors.white),
+                ),
+              ),
+            ),
           ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

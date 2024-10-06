@@ -39,7 +39,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
         centerTitle: true,
         backgroundColor: Colors.grey[300], // Use the specified background color
         elevation: 0,
-
       ),
       body: Container(
         color: Colors.grey[300], // Set the background color
@@ -68,7 +67,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   ),
                   child: Icon(
                     Icons.qr_code_scanner_rounded,
-                    color: Colors.deepPurple,
+                    color: Color(0xFFE50914), // Updated color
                     size: 80,
                   ),
                 ),
@@ -91,7 +90,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 ElevatedButton(
                   onPressed: _scanBarcode, // Call the scan function when button is pressed
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple, // Button color
+                    backgroundColor: Color(0xFFE50914), // Updated button color
                     elevation: 5,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../Model/movie_list_model.dart';
 
@@ -19,13 +20,19 @@ class MovieDetailScreen extends StatelessWidget {
           children: [
             Stack(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-                  child: Image.network(
-                    "https://image.tmdb.org/t/p/original/${movie?.backdropPath ?? ""}",
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 300,
+                Container(
+                  height: 300,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                    child: CachedNetworkImage(
+                      imageUrl:
+                      "https://image.tmdb.org/t/p/original/${movie?.backdropPath}",
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          Center(child: Icon(Icons.error)),
+                    ),
                   ),
                 ),
                 Container(
@@ -170,8 +177,6 @@ class MovieDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            _buildCastAndCrewSection(),
-            const SizedBox(height: 20),
             _buildRecommendationsSection(),
             if (movie?.video == true) // Display a button if video is available
               Padding(
@@ -181,7 +186,7 @@ class MovieDetailScreen extends StatelessWidget {
                     // Navigate to video or trailer
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: Color(0xFFE50914), // Updated button color
                     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -200,7 +205,7 @@ class MovieDetailScreen extends StatelessWidget {
         onPressed: () {
           // Add action for watching trailer
         },
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Color(0xFFE50914), // Updated FAB color
         child: const Icon(Icons.play_arrow, size: 30),
       ),
     );
@@ -235,40 +240,6 @@ class MovieDetailScreen extends StatelessWidget {
           labelStyle: const TextStyle(color: Colors.white),
         );
       }).toList() ?? [],
-    );
-  }
-
-  Widget _buildCastAndCrewSection() {
-    // Sample cast data for demonstration
-    final List<String> castNames = ['Actor 1', 'Actor 2', 'Actor 3', 'Director 1'];
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Cast & Crew:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Column(
-                children: castNames.map((name) => Text(name)).toList(),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -328,9 +299,13 @@ class MovieDetailScreen extends StatelessWidget {
   Widget _buildActionButton(BuildContext context, IconData icon, String label) {
     return Column(
       children: [
-        Icon(icon, size: 30, color: Colors.redAccent),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(color: Colors.black)),
+        IconButton(
+          icon: Icon(icon, color: Colors.black),
+          onPressed: () {
+            // Add action for the button
+          },
+        ),
+        Text(label),
       ],
     );
   }
