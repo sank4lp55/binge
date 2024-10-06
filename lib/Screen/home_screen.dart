@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import '../Controllers/movie_controller.dart';
+import 'scanner_screen.dart';  // Import the ScannerScreen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movieController =
-        Provider.of<MovieController>(context, listen: false);
+    Provider.of<MovieController>(context, listen: false);
 
     // Fetching movies when the screen is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -30,22 +31,23 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           InkWell(
-              onTap: () {
-                Navigator.push<void>(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => SearchScreen(
-                      upComingMovies: movieController.upComingMovies,
-                      nowShowingMovies: movieController.nowShowingMovies,
-                      popularMovies: movieController.popularMovies,
-                    ),
+            onTap: () {
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => SearchScreen(
+                    upComingMovies: movieController.upComingMovies,
+                    nowShowingMovies: movieController.nowShowingMovies,
+                    popularMovies: movieController.popularMovies,
                   ),
-                );
-              },
-              child: Icon(Icons.search_rounded)),
-          SizedBox(width: 20),
-          Icon(Icons.notifications),
-          SizedBox(width: 10),
+                ),
+              );
+            },
+            child: const Icon(Icons.search_rounded),
+          ),
+          const SizedBox(width: 20),
+          const Icon(Icons.notifications),
+          const SizedBox(width: 10),
         ],
       ),
       body: SingleChildScrollView(
@@ -88,6 +90,23 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScannerScreen()),
+              );
+            },
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.qr_code_scanner, color: Colors.white),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

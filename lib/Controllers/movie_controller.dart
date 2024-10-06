@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:binge/Model/movie_list_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:connectivity_plus/connectivity_plus.dart'; // Add this import
 import '../Services/services.dart';
 
 class MovieController with ChangeNotifier {
@@ -26,8 +27,27 @@ class MovieController with ChangeNotifier {
   // Method to fetch now showing movies
   Future<void> fetchNowShowingMovies() async {
     _setLoading(true);
+
     try {
-      _nowShowingMovies = await _apiServices.getNowShowing();
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult[0] == ConnectivityResult.none) {
+        // Offline, try to load cached data
+        String? cachedData =
+            await _apiServices.getCachedData('now_showing_movies');
+        if (cachedData != null) {
+          _nowShowingMovies = MovieListModel.fromJson(json.decode(cachedData));
+
+          _setError(
+              'Loaded cached data. Please check your internet connection.');
+        } else {
+          _setError('No internet connection and no cached data available.');
+        }
+        _error = '';
+        _setLoading(false);
+      } else {
+        _nowShowingMovies = await _apiServices.getNowShowing();
+        _error = '';
+      }
     } catch (e) {
       _setError(e.toString());
     } finally {
@@ -39,8 +59,27 @@ class MovieController with ChangeNotifier {
   // Method to fetch upcoming movies
   Future<void> fetchUpComingMovies() async {
     _setLoading(true);
+
     try {
-      _upComingMovies = await _apiServices.getUpComing();
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult[0] == ConnectivityResult.none) {
+        // Offline, try to load cached data
+        String? cachedData =
+        await _apiServices.getCachedData('upcoming_movies');
+        if (cachedData != null) {
+          _upComingMovies = MovieListModel.fromJson(json.decode(cachedData));
+
+          _setError(
+              'Loaded cached data. Please check your internet connection.');
+        } else {
+          _setError('No internet connection and no cached data available.');
+        }
+        _error = '';
+        _setLoading(false);
+      } else {
+        _upComingMovies = await _apiServices.getUpComing();
+        _error = '';
+      }
     } catch (e) {
       _setError(e.toString());
     } finally {
@@ -52,8 +91,27 @@ class MovieController with ChangeNotifier {
   // Method to fetch popular movies
   Future<void> fetchPopularMovies() async {
     _setLoading(true);
+
     try {
-      _popularMovies = await _apiServices.getPopular();
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult[0] == ConnectivityResult.none) {
+        // Offline, try to load cached data
+        String? cachedData =
+        await _apiServices.getCachedData('popular_movies');
+        if (cachedData != null) {
+          _popularMovies = MovieListModel.fromJson(json.decode(cachedData));
+
+          _setError(
+              'Loaded cached data. Please check your internet connection.');
+        } else {
+          _setError('No internet connection and no cached data available.');
+        }
+        _error = '';
+        _setLoading(false);
+      } else {
+        _popularMovies = await _apiServices.getPopular();
+        _error = '';
+      }
     } catch (e) {
       _setError(e.toString());
     } finally {
