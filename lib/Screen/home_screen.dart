@@ -1,5 +1,6 @@
 import 'package:binge/Model/movie_list_model.dart';
 import 'package:binge/Screen/movie_detail_screen.dart';
+import 'package:binge/Screen/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final movieController = Provider.of<MovieController>(context, listen: false);
+    final movieController =
+        Provider.of<MovieController>(context, listen: false);
 
     // Fetching movies when the screen is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -20,12 +22,27 @@ class HomeScreen extends StatelessWidget {
     });
 
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
+        backgroundColor: Colors.grey[300],
         title: const Text("bINGE"),
         leading: const Icon(Icons.menu),
         centerTitle: true,
-        actions: const [
-          Icon(Icons.search_rounded),
+        actions: [
+          InkWell(
+              onTap: () {
+                Navigator.push<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => SearchScreen(
+                      upComingMovies: movieController.upComingMovies,
+                      nowShowingMovies: movieController.nowShowingMovies,
+                      popularMovies: movieController.popularMovies,
+                    ),
+                  ),
+                );
+              },
+              child: Icon(Icons.search_rounded)),
           SizedBox(width: 20),
           Icon(Icons.notifications),
           SizedBox(width: 10),
@@ -38,7 +55,7 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "  Now Showing",
+                "  Now Playing",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 18,
@@ -100,13 +117,14 @@ class HomeScreen extends StatelessWidget {
         return CarouselSlider.builder(
           itemCount: movieListModel?.movies!.length,
           itemBuilder: (context, index, movieIndex) {
-            final movie =movieListModel?.movies![index];
+            final movie = movieListModel?.movies![index];
             return InkWell(
-              onTap: (){
-                Navigator. push<void>(
+              onTap: () {
+                Navigator.push<void>(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>  MovieDetailScreen(movie: movie),
+                    builder: (BuildContext context) =>
+                        MovieDetailScreen(movie: movie),
                   ),
                 );
               },
@@ -128,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Text(
-                      movie?.title??"",
+                      movie?.title ?? "",
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       style: const TextStyle(
@@ -192,11 +210,12 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final movie = movieListModel?.movies![index];
               return InkWell(
-                onTap: (){
-                  Navigator. push<void>(
+                onTap: () {
+                  Navigator.push<void>(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>  MovieDetailScreen(movie: movie),
+                      builder: (BuildContext context) =>
+                          MovieDetailScreen(movie: movie),
                     ),
                   );
                 },
@@ -220,7 +239,7 @@ class HomeScreen extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Text(
-                        movie?.title??"",
+                        movie?.title ?? "",
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         style: const TextStyle(
