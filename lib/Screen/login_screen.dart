@@ -1,5 +1,6 @@
 import 'package:binge/Screen/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../Widgets/my_button.dart';
 import '../Widgets/my_textfield.dart';
@@ -72,12 +73,14 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 50),
             
                 // logo
-                const Icon(
-                  Icons.lock,
-                  size: 100,
+                SvgPicture.asset(
+                  'assets/logo.svg',
+                  width: 100, // You can adjust the width and height
+                  height: 100,
                 ),
-            
-                const SizedBox(height: 50),
+
+
+                // const SizedBox(height: 20),
             
                 // welcome back, you've been missed!
                 Text(
@@ -189,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Text(
                       'Register now',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color:Color(0xFFE50914),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

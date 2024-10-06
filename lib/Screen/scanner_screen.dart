@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ScannerScreen extends StatefulWidget {
   @override
@@ -32,13 +33,25 @@ class _ScannerScreenState extends State<ScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Barcode Scanner',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        backgroundColor: Colors.grey[300],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/logo.svg',
+              width: 35, // Adjust the width as needed
+              height: 35, // Adjust the height as needed
+            ),
+            const SizedBox(width: 8), // Space between logo and title
+             Text(
+              "Scanner",
+              style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold ), // Adjust font size as needed
+            ),
+          ],
         ),
+        // leading: const Icon(Icons.menu),
         centerTitle: true,
-        backgroundColor: Colors.grey[300], // Use the specified background color
-        elevation: 0,
+
       ),
       body: Container(
         color: Colors.grey[300], // Set the background color

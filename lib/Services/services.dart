@@ -12,6 +12,8 @@ class APIservices {
       "https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey";
   final popularApi =
       "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
+  final topRatedApi =
+      "https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey";
 
   // Store fetched data locally
   Future<void> cacheData(String key, String jsonData) async {
@@ -76,6 +78,23 @@ class APIservices {
         return MovieListModel.fromJson(json.decode(cachedData));
       }
       throw Exception('Failed to load popular movies');
+    }
+  }
+  Future<MovieListModel> getTopRated() async {
+    Uri url = Uri.parse(topRatedApi);
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // Cache data locally
+      await cacheData('top_rated', response.body);
+      return MovieListModel.fromJson(json.decode(response.body));
+    } else {
+      // Attempt to retrieve cached data if the API call fails
+      String? cachedData = await getCachedData('top_rated');
+      if (cachedData != null) {
+        return MovieListModel.fromJson(json.decode(cachedData));
+      }
+      throw Exception('Failed to load top rated movies');
     }
   }
 }

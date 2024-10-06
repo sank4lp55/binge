@@ -4,6 +4,7 @@ import 'package:binge/Screen/search_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../Controllers/movie_controller.dart';
 import 'scanner_screen.dart'; // Import the ScannerScreen
@@ -21,13 +22,21 @@ class HomeScreen extends StatelessWidget {
       movieController.fetchNowShowingMovies();
       movieController.fetchUpComingMovies();
       movieController.fetchPopularMovies();
+      movieController.fetchTopRatedMovies();
     });
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.grey[300],
-        title: const Text("bINGE"),
+        title:
+            SvgPicture.asset(
+              'assets/logo.svg',
+              width: 35, // Adjust the width as needed
+              height: 35, // Adjust the height as needed
+            ),
+
+
         leading: const Icon(Icons.menu),
         centerTitle: true,
         actions: [
@@ -58,10 +67,11 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "  Now Playing",
+                "   Now Playing",
                 style: TextStyle(
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.bold,
                   fontSize: 18,
+
                   color: Colors.black,
                 ),
               ),
@@ -69,24 +79,37 @@ class HomeScreen extends StatelessWidget {
               _buildCarousel(context, 'nowShowing'),
               const SizedBox(height: 20),
               const Text(
-                "  Up Coming Movies",
+                "   Up Coming Movies",
                 style: TextStyle(
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.black,
                 ),
               ),
+              const SizedBox(height: 10),
               _buildListView(context, 'upComing'),
               const SizedBox(height: 10),
               const Text(
-                "  Popular Movies",
+                "   Popular Movies",
                 style: TextStyle(
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.black,
                 ),
               ),
+              const SizedBox(height: 10),
               _buildListView(context, 'popularMovies'),
+              const SizedBox(height: 10),
+              const Text(
+                "   Top Rated Movies",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildListView(context, 'topRated'),
             ],
           ),
         ),
@@ -218,6 +241,9 @@ class HomeScreen extends StatelessWidget {
           movieListModel = movieController.upComingMovies;
         } else if (category == 'popularMovies') {
           movieListModel = movieController.popularMovies;
+        }
+        else if (category == 'topRated') {
+          movieListModel = movieController.topRatedMovies;
         } else {
           return const Center(child: Text('Invalid category'));
         }

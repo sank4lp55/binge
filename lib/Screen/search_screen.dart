@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../Model/movie_list_model.dart';
 import '../Widgets/my_textfield.dart';
 import 'movie_detail_screen.dart';
@@ -83,10 +84,26 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      appBar: AppBar(
+      appBar:  AppBar(
         backgroundColor: Colors.grey[300],
-        title: const Text('Search Movies'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/logo.svg',
+              width: 35, // Adjust the width as needed
+              height: 35, // Adjust the height as needed
+            ),
+            const SizedBox(width: 8), // Space between logo and title
+            Text(
+              "Search",
+              style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold ), // Adjust font size as needed
+            ),
+          ],
+        ),
+
         centerTitle: true,
+
       ),
       body: Column(
         children: [

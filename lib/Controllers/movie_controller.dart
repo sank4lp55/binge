@@ -10,6 +10,7 @@ class MovieController with ChangeNotifier {
   MovieListModel? _nowShowingMovies;
   MovieListModel? _upComingMovies;
   MovieListModel? _popularMovies;
+  MovieListModel? _topRatedMovies;
   String _error = '';
   bool _isLoading = false;
 
@@ -19,6 +20,7 @@ class MovieController with ChangeNotifier {
   MovieListModel? get upComingMovies => _upComingMovies;
 
   MovieListModel? get popularMovies => _popularMovies;
+  MovieListModel? get topRatedMovies => _topRatedMovies;
 
   String get error => _error;
 
@@ -88,6 +90,7 @@ class MovieController with ChangeNotifier {
     notifyListeners();
   }
 
+
   // Method to fetch popular movies
   Future<void> fetchPopularMovies() async {
     _setLoading(true);
@@ -110,6 +113,38 @@ class MovieController with ChangeNotifier {
         _setLoading(false);
       } else {
         _popularMovies = await _apiServices.getPopular();
+        _error = '';
+      }
+    } catch (e) {
+      _setError(e.toString());
+    } finally {
+      _setLoading(false);
+    }
+    notifyListeners();
+  }
+
+  // Method to fetch top rated movies
+  Future<void> fetchTopRatedMovies() async {
+    _setLoading(true);
+
+    try {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult[0] == ConnectivityResult.none) {
+        // Offline, try to load cached data
+        String? cachedData =
+        await _apiServices.getCachedData('top_rated');
+        if (cachedData != null) {
+          _topRatedMovies = MovieListModel.fromJson(json.decode(cachedData));
+
+          _setError(
+              'Loaded cached data. Please check your internet connection.');
+        } else {
+          _setError('No internet connection and no cached data available.');
+        }
+        _error = '';
+        _setLoading(false);
+      } else {
+        _topRatedMovies = await _apiServices.getTopRated();
         _error = '';
       }
     } catch (e) {
